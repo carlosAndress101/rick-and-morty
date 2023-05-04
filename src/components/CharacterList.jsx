@@ -6,9 +6,9 @@ import Loading from "./Loading";
 function NavPage(props){
   return (
     <header className="d-flex justify-content-between align-items-center text-white">
-      <button className="btn btn-primary " onClick={()=> props.SetPage(props.page - 1)}>Back {props.page < 0 ? props.page === 1: props.page -1 }</button>
+      <button className="btn btn-primary " onClick={()=> props.SetPage(props.page - 1)} disabled={props.page <= 1 ? true : false}>Prev {props.page < 0 ? props.page === 1: props.page -1 }</button>
       <p>Page: {props.page}</p>
-      <button className="btn btn-primary " onClick={()=> props.SetPage(props.page + 1)}>Next {props.page +1}</button>
+      <button className="btn btn-primary " onClick={()=> props.SetPage(props.page + 1)} disabled={props.page >= 42 ? true : false}>Next {props.page +1}</button>
     </header>
   )
 }
