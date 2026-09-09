@@ -8,15 +8,14 @@ Package manager is **pnpm 12** (pinned via `packageManager` in `package.json`). 
 
 ```bash
 pnpm install       # install; @swc/core's build script is pre-approved in pnpm-workspace.yaml
-pnpm dev           # Vite dev server, opens at http://localhost:5173/rick-and-morty/
+pnpm dev           # Vite dev server, opens at http://localhost:5173/
 pnpm lint          # oxlint --max-warnings=0
 pnpm lint:fix      # oxlint --fix
 pnpm format        # oxfmt (writes in place)
 pnpm format:check  # oxfmt --check
 pnpm build         # production build -> dist/
-pnpm preview       # serve dist/ at http://localhost:4173/rick-and-morty/
+pnpm preview       # serve dist/ at http://localhost:4173/
 pnpm check         # lint + format:check + build, the full gate
-pnpm deploy        # builds via predeploy, then gh-pages -d dist
 ```
 
 There is **no test framework** in this project. Do not assume `pnpm test` exists.
@@ -102,9 +101,27 @@ Components carry semantic class names (`character-card__name`), not long inline 
 
 ### Deployment
 
-`pnpm deploy` runs `predeploy` (build) then pushes `dist/` to the `gh-pages` branch.
+Deployment is **Cloudflare Pages**, driven by its Git integration — there is no deploy
+script in this repo and nothing to run by hand. Pushing to `master` triggers a build.
 
-`vite.config.js` sets `base: "/rick-and-morty/"` because the app is a GitHub Pages **project** site served from a sub-path. This is a root-relative path, not the absolute `https://carlosAndress101.github.io/...` URL that used to be there: it resolves to identical URLs once deployed, but it also lets `vite dev` and `vite preview` work locally instead of pointing assets at the live github.io host. Keep the trailing slash. If you change the repository name, change this too.
+| Cloudflare setting     | Value                     |
+| ---------------------- | ------------------------- |
+| Build command          | `pnpm build`              |
+| Build output directory | `dist`                    |
+| Node version           | from `.node-version` (24) |
+
+`.node-version` is load-bearing: `engines` requires Node >= 24 and Cloudflare's default is
+lower, so without that file `pnpm install` fails on their builder before Vite ever runs.
+pnpm itself is detected from `pnpm-lock.yaml`.
+
+`vite.config.js` sets `base: "/"` because Cloudflare Pages serves each project from the
+root of its own hostname. It was `/rick-and-morty/` under GitHub Pages, which publishes
+project sites under a repository-named sub-path — deploying that value to Cloudflare
+produces a blank page with 404s on every asset and no visible error. Change it only if the
+app moves back to a sub-path host.
+
+The project previously deployed to GitHub Pages via a `gh-pages` branch. That branch, the
+`gh-pages` dependency and the `predeploy`/`deploy` scripts were all removed.
 
 `VITE_API_BASE_URL` overrides the API root (see `.env.example`). `import.meta.env` is optional-chained in `lib/constants.js` so these modules can also be imported by a plain Node script.
 

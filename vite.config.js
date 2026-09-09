@@ -8,16 +8,17 @@ import { defineConfig } from "vite";
  */
 export default defineConfig({
   /*
-   * The app is published to GitHub Pages as a *project* site, which serves it from a
-   * sub-path (https://<user>.github.io/rick-and-morty/) rather than the domain root.
-   * Without this, every built asset URL would point at the domain root and 404.
+   * Cloudflare Pages serves each project from the root of its own hostname
+   * (<project>.pages.dev, or a custom domain), so assets resolve from "/".
    *
-   * This is a root-relative path, not the absolute URL that was here before: it resolves
-   * to exactly the same URLs once deployed, but it also lets `vite preview` and
-   * `vite dev` serve the app locally instead of pointing assets at the live github.io
-   * host. Keep the trailing slash — Vite joins it directly onto asset filenames.
+   * This was previously "/rick-and-morty/" for GitHub Pages, which publishes project
+   * sites under a repository-named sub-path. Deploying that value to Cloudflare would
+   * emit asset URLs like /rick-and-morty/assets/index.js against files that actually live
+   * at /assets/index.js — a blank page with two 404s and no error in the UI.
+   *
+   * Only change this if the app moves back to a host that serves it from a sub-path.
    */
-  base: "/rick-and-morty/",
+  base: "/",
 
   plugins: [react()],
 
@@ -29,7 +30,7 @@ export default defineConfig({
      * Raising any of these is a compatibility decision, not a formatting one.
      */
     target: ["chrome107", "edge107", "firefox102", "safari16"],
-    // Emitted sources are public on GitHub Pages, so skip the extra payload.
+    // The deployed bundle is public, so skip shipping the extra payload.
     sourcemap: false,
     // Fail the build rather than silently shipping an oversized bundle.
     chunkSizeWarningLimit: 500,

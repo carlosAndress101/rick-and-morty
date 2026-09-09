@@ -3,7 +3,7 @@
 A small, fast single-page app for browsing every character in the Rick and Morty
 multiverse, built on [The Rick and Morty API](https://rickandmortyapi.com).
 
-**Live:** https://carlosAndress101.github.io/rick-and-morty/
+<!-- Live: add the Cloudflare Pages URL once the project is connected. -->
 
 <!-- Screenshot: replace with a capture of the character grid at 1440px. -->
 <!-- ![Character grid](docs/screenshot-grid.png) -->
@@ -23,7 +23,7 @@ multiverse, built on [The Rick and Morty API](https://rickandmortyapi.com).
 | Linting    | Oxlint (OXC)             | Rust-based; lints the whole repo in milliseconds                    |
 | Formatting | oxfmt                    | Same OXC toolchain as the linter; formats JS, JSX, CSS, MD and JSON |
 | Packages   | pnpm 12                  | Strict, content-addressed, fast                                     |
-| Hosting    | GitHub Pages             | Static, free, `gh-pages` branch                                     |
+| Hosting    | Cloudflare Pages         | Static, global edge, builds straight from Git                       |
 
 No TypeScript, no router, no state library, no data-fetching library. Types are JSDoc.
 
@@ -117,8 +117,7 @@ cp .env.example .env.local   # then edit VITE_API_BASE_URL
 pnpm dev
 ```
 
-Opens http://localhost:5173/rick-and-morty/ — note the sub-path, which mirrors the
-GitHub Pages deployment so local and production behave identically.
+Opens http://localhost:5173/ — the same root path the app is served from in production.
 
 ## Linting and formatting
 
@@ -141,18 +140,30 @@ is caret-ranged like the rest of the toolchain.
 
 ```bash
 pnpm build     # -> dist/
-pnpm preview   # serve dist/ at http://localhost:4173/rick-and-morty/
+pnpm preview   # serve dist/ at http://localhost:4173/
 ```
 
 ## Deploy
 
-```bash
-pnpm deploy
-```
+Deployment is handled by **Cloudflare Pages** via its Git integration. There is no deploy
+script and nothing to run locally — pushing to `master` triggers a build.
 
-`predeploy` builds automatically, then `gh-pages` publishes `dist/` to the `gh-pages`
-branch. `vite.config.js` sets `base: "/rick-and-morty/"` because this is a GitHub Pages
-_project_ site served from a sub-path — if you rename the repository, update that value.
+Connect the repository in the Cloudflare dashboard with:
+
+| Setting                | Value                          |
+| ---------------------- | ------------------------------ |
+| Framework preset       | Vite                           |
+| Build command          | `pnpm build`                   |
+| Build output directory | `dist`                         |
+| Node version           | read from `.node-version` (24) |
+
+`.node-version` matters: `engines` requires Node >= 24 and Cloudflare's default is lower,
+so without it `pnpm install` fails on their builder. pnpm is detected from
+`pnpm-lock.yaml`.
+
+`vite.config.js` sets `base: "/"` because Cloudflare Pages serves each project from the
+root of its own hostname. Change it only if the app moves to a host that serves it from a
+sub-path.
 
 ## Browser support
 

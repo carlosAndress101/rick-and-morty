@@ -7,6 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- **Hosting moved from GitHub Pages to Cloudflare Pages.** Deployment is now driven by
+  Cloudflare's Git integration: pushing to `master` triggers a build. There is no deploy
+  script in the repository any more.
+- **`vite.config.js` `base` is now `/`** (was `/rick-and-morty/`). Cloudflare Pages serves
+  each project from the root of its own hostname, whereas GitHub Pages published this as a
+  project site under a repository-named sub-path. Deploying the old value to Cloudflare
+  would have produced a blank page with a 404 on every asset and no visible error.
+- Deployment sections of `README.md` and `CLAUDE.md` rewritten for Cloudflare.
+
+### Added
+
+- **`.node-version`** pinning Node 24. `engines` requires `>= 24` and Cloudflare's default
+  builder image is lower, so without this file `pnpm install` fails before Vite runs.
+
+### Removed
+
+- **`gh-pages` dependency** and the **`predeploy`** / **`deploy`** scripts.
+- The **`gh-pages` branch** on the remote.
+
+### Fixed
+
+- Documented `pnpm run deploy` rather than `pnpm deploy` while the script still existed:
+  pnpm 12 ships a built-in `deploy` command for workspace packages that shadows the
+  script, so the bare form failed with `ERR_PNPM_INVALID_DEPLOY_TARGET`. Now moot — the
+  script is gone — but the shadowing applies to any script named `deploy`.
+
+---
+
 ## [2.0.0] — 2026-09-08
 
 ### 2026 Modernization Release
