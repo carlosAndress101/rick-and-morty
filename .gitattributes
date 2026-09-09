@@ -1,0 +1,13 @@
+# Normalise line endings so Windows checkouts do not produce whole-file diffs.
+* text=auto eol=lf
+
+# Keep the lockfile out of diffs and merge conflicts in review tooling.
+pnpm-lock.yaml linguist-generated=true -diff
+
+# Binary assets.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.woff binary
+*.woff2 binary

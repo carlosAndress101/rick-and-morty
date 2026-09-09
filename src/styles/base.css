@@ -1,0 +1,141 @@
+/**
+ * Base layer: design tokens, document defaults and page chrome.
+ *
+ * Loaded after Bootstrap so these rules win on equal specificity. Bootstrap still owns
+ * the reset, grid utilities, buttons and badges; this file owns the app's own identity.
+ */
+
+:root {
+  /* Palette — dark surface with a portal-green accent. */
+  --app-bg: #0d1117;
+  --app-surface: #161b22;
+  --app-surface-raised: #1c2330;
+  --app-border: #2b3444;
+  --app-text: #e8edf4;
+  --app-text-muted: #9fb0c3;
+  --app-accent: #3ecf8e;
+  --app-accent-contrast: #06231a;
+
+  /* Spacing scale, so vertical rhythm is not re-invented per component. */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+
+  color-scheme: dark;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--app-bg);
+  color: var(--app-text);
+}
+
+/*
+ * Bootstrap's .btn-info/.badge palettes are tuned for a light page. Re-point the few
+ * variables the app actually uses so contrast clears WCAG AA on the dark surface.
+ */
+.btn-info {
+  --bs-btn-bg: var(--app-accent);
+  --bs-btn-border-color: var(--app-accent);
+  --bs-btn-color: var(--app-accent-contrast);
+  --bs-btn-hover-bg: #56e0a3;
+  --bs-btn-hover-border-color: #56e0a3;
+  --bs-btn-hover-color: var(--app-accent-contrast);
+  --bs-btn-disabled-bg: #2a4d40;
+  --bs-btn-disabled-border-color: #2a4d40;
+  --bs-btn-disabled-color: #8fb3a5;
+}
+
+.btn-outline-info {
+  --bs-btn-color: var(--app-accent);
+  --bs-btn-border-color: var(--app-accent);
+  --bs-btn-hover-bg: var(--app-accent);
+  --bs-btn-hover-color: var(--app-accent-contrast);
+  --bs-btn-disabled-color: #6d8a7e;
+  --bs-btn-disabled-border-color: #33443d;
+}
+
+/* A visible, high-contrast focus ring on every interactive element. */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 3px solid var(--app-accent);
+  outline-offset: 2px;
+  border-radius: var(--space-xs);
+}
+
+/* ---------- Page chrome ---------- */
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.skip-link {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  z-index: 10;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  background-color: var(--app-accent);
+  color: var(--app-accent-contrast);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-200%);
+  transition: transform 150ms ease-in-out;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+.app-header {
+  padding: var(--space-xl) 0 var(--space-lg);
+  border-bottom: 1px solid var(--app-border);
+  text-align: center;
+}
+
+.app-header__title {
+  margin: 0;
+  font-size: clamp(2.25rem, 6vw, 4rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--app-accent);
+}
+
+.app-header__subtitle {
+  margin: var(--space-sm) 0 0;
+  color: var(--app-text-muted);
+}
+
+.app-main {
+  flex: 1;
+  padding: var(--space-xl) 0;
+}
+
+/* The main landmark is focus target for the skip link but never a tab stop. */
+.app-main:focus {
+  outline: none;
+}
+
+.app-footer {
+  padding: var(--space-lg) 0;
+  border-top: 1px solid var(--app-border);
+  text-align: center;
+}
+
+.app-footer__text {
+  margin: 0;
+  color: var(--app-text-muted);
+  font-size: 0.9rem;
+}
+
+.app-footer__link {
+  color: var(--app-accent);
+}

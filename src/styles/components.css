@@ -1,0 +1,195 @@
+/**
+ * Component layer: one block per UI component, named to match the JSX class names.
+ *
+ * Replaces the long inline Bootstrap utility strings the components used to carry, so
+ * markup describes structure and this file describes appearance.
+ */
+
+/* ---------- Character grid ---------- */
+
+/*
+ * CSS Grid with auto-fit rather than Bootstrap's .row/.col-md-4: the columns respond to
+ * available width instead of fixed breakpoints, so the layout stays even at every size
+ * without per-card wrapper divs.
+ */
+.character-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--space-lg);
+  margin: var(--space-lg) 0;
+}
+
+/*
+ * Applied while the next page is in flight. The current cards stay mounted at reduced
+ * opacity, which keeps scroll position and page height stable across a navigation.
+ */
+.character-grid--busy {
+  opacity: 0.45;
+  transition: opacity 150ms ease-in-out;
+  pointer-events: none;
+}
+
+/* ---------- Character card ---------- */
+
+.character-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--app-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--app-surface);
+  transition:
+    transform 150ms ease-in-out,
+    border-color 150ms ease-in-out;
+}
+
+.character-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--app-accent);
+}
+
+.character-card__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background-color: var(--app-surface-raised);
+}
+
+.character-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+}
+
+.character-card__name {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.character-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.character-card__species {
+  color: var(--app-text-muted);
+}
+
+.character-card__origin {
+  display: flex;
+  flex-direction: column;
+  margin: auto 0 0;
+  font-size: 0.9rem;
+}
+
+.character-card__label {
+  color: var(--app-text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---------- Skeleton placeholders ---------- */
+
+.character-card--skeleton {
+  border-color: var(--app-border);
+}
+
+.character-card--skeleton:hover {
+  transform: none;
+  border-color: var(--app-border);
+}
+
+.skeleton {
+  border-radius: var(--radius-md);
+  background-color: var(--app-surface-raised);
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+.skeleton--image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 0;
+}
+
+.skeleton--title {
+  height: 1.15rem;
+  width: 70%;
+}
+
+.skeleton--line {
+  height: 0.85rem;
+  width: 90%;
+}
+
+.skeleton--short {
+  width: 50%;
+}
+
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* ---------- Pagination ---------- */
+
+.pagination-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
+}
+
+.pagination-bar__group {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.pagination-bar__status {
+  margin: 0;
+  color: var(--app-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.pagination-bar__status strong {
+  color: var(--app-text);
+}
+
+/* ---------- Empty and error panels ---------- */
+
+.state-panel {
+  max-width: 32rem;
+  margin: var(--space-xl) auto;
+  padding: var(--space-xl) var(--space-lg);
+  border: 1px solid var(--app-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--app-surface);
+  text-align: center;
+}
+
+.state-panel__title {
+  margin: 0 0 var(--space-sm);
+  font-size: 1.35rem;
+}
+
+.state-panel__message {
+  margin: 0 0 var(--space-lg);
+  color: var(--app-text-muted);
+}

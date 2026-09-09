@@ -1,0 +1,25 @@
+/**
+ * Utility layer: global preference overrides and single-purpose helpers.
+ *
+ * Kept last in the import order so a utility can override a component rule. Only
+ * helpers that are actually used are defined here — an unused utility is dead CSS.
+ */
+
+/**
+ * Honour the operating system's reduced-motion preference.
+ *
+ * The card lift, the busy fade and the skeleton pulse are decorative, so they collapse
+ * to a near-instant transition rather than being removed outright.
+ *
+ * Programmatic scrolling is handled separately in `lib/utils.js`, because this rule
+ * cannot influence a `scrollTo({ behavior: "smooth" })` call issued from JavaScript.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

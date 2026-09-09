@@ -1,0 +1,8 @@
+# pnpm 12 reads repo-level settings from this file; they were moved out of
+# package.json's "pnpm" field and `onlyBuiltDependencies` became `allowBuilds`.
+#
+# @swc/core's postinstall resolves the prebuilt native binary for the current
+# platform (@swc/core-darwin-arm64 and friends). Without it, @vitejs/plugin-react-swc
+# cannot transform JSX and `vite build` fails.
+allowBuilds:
+  "@swc/core": true
